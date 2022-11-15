@@ -15,7 +15,8 @@ jobs:
       image_resource: 
         type: registry-image
         source:
-          repository: mcr.microsoft.com/dotnet/sdk:7.0
+          repository: mcr.microsoft.com/dotnet/sdk
+          tag: "7.0"
       inputs:
       - name: repo
       run:
