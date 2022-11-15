@@ -1,25 +1,47 @@
 resources:
-- name: repo
-  type: git
-  source:
-    uri: https://github.com/Althammer-Kill/concourse-test.git
-    
+  - name: repo
+    type: git
+    source:
+      uri: https://github.com/Althammer-Kill/concourse-test.git
+
 jobs:
-- name: concourse-test
-  plan: 
-  - get: repo
-    trigger: true
-  - task: build
-    config:
-      platform: linux
-      image_resource: 
-        type: registry-image
-        source:
-          repository: mcr.microsoft.com/dotnet/sdk
-          tag: "7.0"
-      inputs:
-      - name: repo
-      run:
-        dir: "repo"
-        path: "dotnet"
-        args: ["build"]
+  - name: concourse-test
+    plan:
+      - get: repo
+        trigger: true
+
+      - task: build
+        config:
+          platform: linux
+          image_resource: &dotnet-sdk
+            type: registry-image
+            source:
+              repository: mcr.microsoft.com/dotnet/sdk
+              tag: "7.0"
+          inputs:
+            - name: repo
+          outputs:
+            - name: repo
+          run:
+            path: "dotnet"
+            args: ["build", "repo", "-o", "build"]
+
+      - task: test
+        config:
+          platform: linux
+          image_resource: *dotnet-sdk
+          inputs:
+            - name: repo
+          run:
+            path: "dotnet"
+            args: ["test", "repo", "-o", "build"]
+
+      - task: publish
+        config:
+          platform: linux
+          image_resource: *dotnet-sdk
+          inputs:
+            - name: repo
+          run:
+            path: "dotnet"
+            args: ["publish", "repo", "-o", "publish"]
