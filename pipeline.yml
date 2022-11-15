@@ -21,7 +21,8 @@ jobs:
           inputs:
             - name: repo
           outputs:
-            - name: repo
+            - name: repo2
+              path: repo
           run:
             path: "dotnet"
             args: ["build", "repo", "-o", "build"]
@@ -31,7 +32,8 @@ jobs:
           platform: linux
           image_resource: *dotnet-sdk
           inputs:
-            - name: repo
+            - name: repo2
+              path: repo
           run:
             path: "dotnet"
             args: ["test", "repo", "-o", "build"]
@@ -41,7 +43,8 @@ jobs:
           platform: linux
           image_resource: *dotnet-sdk
           inputs:
-            - name: repo
+            - name: repo2
+              path: repo
           run:
             path: "dotnet"
             args: ["publish", "repo", "-o", "publish"]

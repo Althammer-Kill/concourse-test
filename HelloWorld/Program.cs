@@ -1,4 +1,6 @@
-﻿#warning "Test"
+﻿using Newtonsoft.Json.Linq;
+
+#warning "Test"
 
 public static class Hello
 {
@@ -6,6 +8,8 @@ public static class Hello
 
 	public static void Main()
 	{
+		JObject obj = new();
 		Console.WriteLine(Text);
+		GC.KeepAlive(obj);
 	}
 }
