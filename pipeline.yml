@@ -2,22 +2,23 @@ resources:
 - name: repo
   type: git
   source:
-    uri: https://github.com/Althammer-Kill/concourse-test
+    uri: https://github.com/Althammer-Kill/concourse-test.git
     
 jobs:
-- name: hello-world-job
+- name: concourse-test
   plan: 
   - get: repo
     trigger: true
-  - task: hello-world-task
+  - task: build
     config:
       platform: linux
       image_resource: 
         type: registry-image
         source:
-          repository: busybox
+          repository: mcr.microsoft.com/dotnet/sdk:7.0
       inputs:
       - name: repo
       run:
-        path: cat
-        args: ["repo/test.txt"]
+        dir: "repo"
+        path: "dotnet"
+        args: ["build"]
