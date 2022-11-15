@@ -2,11 +2,13 @@ resources:
 - name: repo
   type: git
   source:
-    uri: https://github.com/concourse/examples.git
+    uri: https://github.com/Althammer-Kill/concourse-test
     
 jobs:
 - name: hello-world-job
   plan: 
+  - get: repo
+    trigger: true
   - task: hello-world-task
     config:
       platform: linux
@@ -14,6 +16,8 @@ jobs:
         type: registry-image
         source:
           repository: busybox
+      inputs:
+      - name: repo
       run:
         path: cat
-        args: ["test.txt"]
+        args: ["repo/test.txt"]
